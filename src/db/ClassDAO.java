@@ -26,15 +26,15 @@ public class ClassDAO {
         List<ClassDTO> list = new ArrayList<ClassDTO>();
         try (Connection connection = getConnection();
             PreparedStatement preparedStatement 
-                = connection.prepareStatement("select * from class");){
+                = connection.prepareStatement("select c.class_name, c.class_time, c.class_count, p.prof_name " +
+                                                "from class c join professor on c.prof_idx = p.prof_idx");){
             try(ResultSet rs = preparedStatement.executeQuery();) {
                 while(rs.next()) {
                     ClassDTO classD = new ClassDTO();
-                    classD.setClass_idx(rs.getInt("class_idx"));
                     classD.setClass_name(rs.getString("class_name"));
-                    classD.setClass_time(rs.getInt("class_time"));
+                    classD.setClass_time(rs.getString("class_time"));
                     classD.setClass_count(rs.getInt("class_count"));
-                    classD.setProf_idx(rs.getInt("prof_idx"));
+                    classD.setProf_name(rs.getString("prof_name"));
                     list.add(classD);
                 }
             } catch (Exception e) {
@@ -54,7 +54,7 @@ public class ClassDAO {
                  = connection.prepareStatement("insert into class(class_name, class_time, class_count, prof_idx) values(?, ?, ?, ?)");){
             
                     preparedStatement.setString(1, createLect.getClass_name());
-                    preparedStatement.setInt(2, createLect.getClass_time());
+                    preparedStatement.setString(2, createLect.getClass_time());
                     preparedStatement.setInt(3, createLect.getClass_count());
                     preparedStatement.setInt(4, createLect.getProf_idx());
                     preparedStatement.executeUpdate();
@@ -91,5 +91,49 @@ public class ClassDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkTime(int prof_idx, String classTime) {
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement
+                = connection.prepareStatement("select * from class where prof_idx = ? and class_time = ?");){
+                preparedStatement.setInt(1, prof_idx);
+                preparedStatement.setString(2, classTime);
+                try (ResultSet rs = preparedStatement.executeQuery();){
+                    if(rs.next()){
+                        System.out.println("해당 시간대에 개설된 강의가 있습니다!");
+                        return true;
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
+    }
+
+    public List<ClassDTO> getProfClass(int prof_idx) {
+        List<ClassDTO> list = new ArrayList<ClassDTO>();
+        try (Connection connection = getConnection();
+            PreparedStatement preparedStatement 
+                = connection.prepareStatement("select * from class where prof_idx = ?");){
+            preparedStatement.setInt(1, prof_idx);
+            try (ResultSet rs = preparedStatement.executeQuery();){
+                while(rs.next()) {
+                    ClassDTO classDTO = new ClassDTO();
+                    classDTO.setClass_name(rs.getString("class_name"));
+                    classDTO.setClass_time(rs.getString("class_time"));
+                    classDTO.setClass_count(rs.getInt("class_count"));
+                    list.add(classDTO);
+                }
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

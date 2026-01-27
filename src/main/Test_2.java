@@ -214,7 +214,14 @@ public class Test_2 {
                         System.out.println("강의 정원 : ");
                         int lectCount = Integer.parseInt(scan.nextLine());
 
-                        ClassDTO createLecture = new ClassDTO(lectName, lectTime, lectCount, loginProf.getProf_idx());
+                        //중복 시간 체크
+                        boolean checkTime = classDAO.checkTime(loginProf.getProf_idx(), classTime);//특정 교수가 특정 시간대에 강좌를 개설했는지 확인
+                        if(checkTime){
+                            System.out.println(classTime + "에 이미 개설된 강좌가 있습니다.");
+                            break;
+                        }
+                        //선택 시간대에 강좌가 없음
+                        ClassDTO createLecture = new ClassDTO(lectName, classTime, lectCount, loginProf.getProf_idx());
                         classDAO.insertLecture(createLecture);
                         
                         break;
@@ -224,7 +231,7 @@ public class Test_2 {
                             System.out.println("로그인후 접근 가능합니다.");
                             continue;
                         }
-                        List<ClassDTO> allClass = classDAO.getAllClasses();
+                        List<ClassDTO> allClass = classDAO.getProfClass(loginProf.getProf_idx());
                         System.out.println("===================================================");
                         System.out.println("내가 개설한 강의 목록: ");
                         System.out.println("===================================================");

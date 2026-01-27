@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import vo.ClassDTO;
-import vo.MemberDTO;
 import vo.StudentDTO;
 
 public class StudentDAO {

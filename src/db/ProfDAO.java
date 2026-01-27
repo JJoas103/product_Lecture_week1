@@ -5,9 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import vo.ClassDTO;
 import vo.ProfDTO;
-import vo.StudentDTO;
 
 public class ProfDAO {
     String url = "jdbc:mysql://localhost:3306/jdbc";
@@ -82,6 +80,8 @@ public class ProfDAO {
         }
         return loginProf;//null값 리턴
     }
+
+    
     
     
 }

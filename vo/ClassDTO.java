@@ -4,16 +4,18 @@ public class ClassDTO {
     
     int class_idx;
 	String class_name;
-	int class_time;
+	String class_time;
 	int class_count;
     int prof_idx;
+
+    String prof_name;
 
     
     
     public ClassDTO() {
     }
     
-    public ClassDTO(String class_name, int class_time, int class_count, int prof_idx) {
+    public ClassDTO(String class_name, String class_time, int class_count, int prof_idx) {
         this.class_name = class_name;
         this.class_time = class_time;
         this.class_count = class_count;
@@ -36,11 +38,11 @@ public class ClassDTO {
         this.class_name = class_name;
     }
     
-    public int getClass_time() {
+    public String getClass_time() {
         return this.class_time;
     }
     
-    public void setClass_time(int class_time) {
+    public void setClass_time(String class_time) {
         this.class_time = class_time;
     }
     
@@ -58,7 +60,14 @@ public class ClassDTO {
     public void setProf_idx(int prof_idx) {
         this.prof_idx = prof_idx;
     }
+    public String getProf_name() {
+        return this.prof_name;
+    }
 
+    public void setProf_name(String prof_name) {
+        this.prof_name = prof_name;
+    }
+    
     @Override
     public String toString() {
         return "{" +
